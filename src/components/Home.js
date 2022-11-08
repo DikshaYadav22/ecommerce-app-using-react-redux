@@ -8,6 +8,7 @@ import {ADD} from '../redux/actions/action'
 
 function Home() {
     const[menuData, setMenuData] = useState(Cardsdata);
+    console.log(menuData);
 
     const dispatch = useDispatch();
 
