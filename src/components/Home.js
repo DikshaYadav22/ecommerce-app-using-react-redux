@@ -3,10 +3,17 @@ import Cardsdata from './CardsData';
 import './styles.css';
 import {Card, CardTitle, CardBody, Button} from 'reactstrap';
 import {Link} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
+import {ADD} from '../redux/actions/action'
 
 function Home() {
     const[menuData, setMenuData] = useState(Cardsdata);
-    console.log(menuData);
+
+    const dispatch = useDispatch();
+
+    const send = (e)=>{
+        dispatch(ADD(e))
+    }
 
   return (
     <>
@@ -15,14 +22,14 @@ function Home() {
       
       {menuData.map((item)=>{
        return(<>
-        <Card className='card-item'>
+        <Card  className='card-item'>
             <Link to="/cart"><img src={item.imgdata} width="100%" height="250" /></Link>
             <CardTitle><h4>{item.rname}</h4></CardTitle>
             <CardBody>
               <span>Price: {item.price}</span>
              
             </CardBody>
-            <Button color="info">Add To Cart</Button>
+            <Button color="info" onClick={()=>send(item)}>Add To Cart</Button>
         </Card>
        </>)
       })}
