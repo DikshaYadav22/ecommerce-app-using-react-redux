@@ -24,7 +24,7 @@ function Home() {
       {menuData.map((item)=>{
        return(<>
         <Card  className='card-item'>
-            <Link to="/cart"><img src={item.imgdata} width="100%" height="250" /></Link>
+            <Link to={`/cart/${item.id}`}><img src={item.imgdata} width="100%" height="250" /></Link>
             <CardTitle><h4>{item.rname}</h4></CardTitle>
             <CardBody>
               <span>Price: {item.price}</span>

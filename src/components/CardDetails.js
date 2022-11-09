@@ -1,45 +1,83 @@
-import React from 'react'
-import './styles.css'
-import {Table } from 'reactstrap';
+import React, { useState, useEffect } from "react";
+import "./styles.css";
+import { Table } from "reactstrap";
+import { useParams, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import {FaTrash} from 'react-icons/fa';
+import {DLT} from '../redux/actions/action';
+
 
 function CardDetails() {
+  const navigate = useNavigate();
+  const [cartItem, setCartItem] = useState([]);
+  const { id } = useParams();
+  const getData = useSelector((state) => state.cartReducer.carts);
+
+  const dispatch = useDispatch();
+  const compare = () => {
+    let compareData = getData.filter((item) => {
+      return item.id == id;
+    });
+    console.log(compareData);
+
+    setCartItem(compareData);
+  };
+
+  useEffect(() => {
+    compare();
+  }, [id]);
+
+  const dlt = (id)=> {
+    dispatch(DLT(id));
+    navigate('/');
+  }
+
   return (
     <>
-    <h3 className='text-center m-5 p-2'>Items Details Page</h3>
-    <div className="container mx-auto main-detail">
-        <div>
-          <img src="https://b.zmtcdn.com/data/pictures/9/18857339/8f53919f1175c08cf0f0371b73704f9b_o2_featured_v2.jpg?output-format=webp" width="300"/>
-        </div>
+      <h3 className="text-center m-5 p-2">Items Details Page</h3>
+      <div className="container mx-auto main-detail">
+   
+                {
+            cartItem.map((cart)=>{
+              return( 
+                <>
+             
+          <img
+            src={cart.imgdata}
+            width="300"
+          />
+    
         <Table>
-          <thead>
-            <tr>
-              <th>Restaurant: </th>
-            </tr>
-            <tr>
-              <th>Price: </th>
-              <th>Rating: </th>
-            </tr>
-            <tr>
-              <th>Dishes: </th>
-          
-              <th>Order Review</th>
-              </tr>
-
-              <tr>
-              <th>Total</th>
-              <th>Remove: </th>
-            </tr>
-            <tr>
-              Quantity
-            </tr>
-          </thead>
-          <tbody>
-            
-          </tbody>
+           <thead>
+                <tr>
+                  <th>Restaurant: {cart.rname} </th>
+                </tr>
+                <tr>
+                  <th>Price: ₹{cart.price}</th>
+                  <th>Rating:{cart.rating} </th>
+                </tr>
+                <tr>
+                  <th>Dishes: {cart.address} </th>
+    
+                  <th>Order Review : {cart.somedata}</th>
+                </tr>
+    
+                <tr>
+                  <th>Total: <h5>{(cart.price * cart.qnty)}</h5></th>
+                  <th><FaTrash className="trash" onClick={()=>dlt(cart.id)}/> </th>
+                </tr>
+                <tr>Quantity</tr>
+              </thead>
+       
+         
         </Table>
-    </div>
+        </>
+        )
+      })
+          }
+      </div>
     </>
-  )
+  );
 }
 
-export default CardDetails
+export default CardDetails;

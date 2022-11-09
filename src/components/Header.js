@@ -15,10 +15,16 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Badge from '@mui/material/Badge';
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {FaTrash} from 'react-icons/fa';
+import {Link, useParams} from 'react-router-dom';
+import {DLT} from '../redux/actions/action';
+
 
 function Header() {
+  
+  let dispatch = useDispatch();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -29,17 +35,20 @@ function Header() {
   };
 
   const getData = useSelector((state) => state.cartReducer.carts);
-  console.log(getData);
+
+  const dlt = (id) => {
+    dispatch(DLT(id))
+  }
+
+
   return (
     <div>
       <Navbar color="dark" className="header">
-        <NavbarBrand href="/" className="text-white">
-          Add To Cart
-        </NavbarBrand>
+        <h3 className="text-white">Ecommerce App</h3>
         <NavItem>
-          <NavLink href="/" className="text-white">
+          <Link to="/" className="text-white">
             Home
-          </NavLink>
+          </Link>
         </NavItem>
 
         <NavbarText>
@@ -64,7 +73,7 @@ function Header() {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClose={handleClose}>
+        <MenuItem onClick={handleClose}>
           <Card>
             <CardTitle>
               {
@@ -80,12 +89,12 @@ function Header() {
                       {
                         getData.map((item)=>{
                           return(<tr>
-                            <td><img src={item.imgdata} width="120" /></td>
+                            <td><Link to={`/cart/${item.id}`}><img src={item.imgdata} width="120" /></Link></td>
                             <td>
                               <p>{item.rname}</p>
                               <p>Price: ₹{item.price}</p>
                               <p>Quantity: ₹{item.qnty}</p>
-                              <p><FaTrash /></p>
+                              <p onClick={()=>dlt(item.id)}><FaTrash className="trash"  /></p>
                               </td>
                           </tr>)
                         })
