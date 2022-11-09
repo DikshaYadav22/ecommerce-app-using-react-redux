@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -22,7 +22,8 @@ import {DLT} from '../redux/actions/action';
 
 
 function Header() {
-  
+  const [price, setPrice] = useState(0);
+  console.log(price);
   let dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -39,6 +40,19 @@ function Header() {
   const dlt = (id) => {
     dispatch(DLT(id))
   }
+
+  const total = () => 
+  {
+    let price = 0;
+    getData.map((el,id)=>{
+      return price += el.price
+    });
+    setPrice(price);
+  }
+
+  useEffect(()=> {
+    total();
+  }, [total])
 
 
   return (
@@ -88,7 +102,7 @@ function Header() {
                     <tbody>
                       {
                         getData.map((item)=>{
-                          return(<tr>
+                          return(<><tr>
                             <td><Link to={`/cart/${item.id}`}><img src={item.imgdata} width="120" /></Link></td>
                             <td>
                               <p>{item.rname}</p>
@@ -96,7 +110,12 @@ function Header() {
                               <p>Quantity: ₹{item.qnty}</p>
                               <p onClick={()=>dlt(item.id)}><FaTrash className="trash"  /></p>
                               </td>
-                          </tr>)
+                           
+                          </tr>
+                          <tr>
+                            
+                            <td>Total: ₹{price}</td>
+                            </tr></>)
                         })
                       }
                     </tbody>
